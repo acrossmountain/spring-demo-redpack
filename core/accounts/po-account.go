@@ -10,7 +10,7 @@ import (
 )
 
 type Account struct {
-	Id           int64           `gorm:"column:id;type:bigint(20) AUTO_INCREMENT;not null;comment:'账户ID'"`
+	Id           int64           `gorm:"column:id;type:bigint(20) auto_increment;not null;comment:'账户ID'"`
 	AccountNo    string          `gorm:"column:account_no;type:varchar(32);not null;unique;comment:'账户编号'"`
 	AccountName  string          `gorm:"column:account_name;type:varchar(64);not null;comment:'账户名称'"`
 	AccountType  int             `gorm:"column:account_type;type:tinyint(2);not null;comment:'账户类型'"`
@@ -31,10 +31,10 @@ func (po *Account) ToDTO() *services.AccountDTO {
 	dto.CurrencyCode = po.CurrencyCode
 	dto.UserId = po.UserId
 	dto.Username = po.Username.String
-	//dto.Balance = po.Balance
-	//dto.Status = po.Status
+	dto.Balance = po.Balance
+	dto.Status = po.Status
 	dto.CreatedAt = po.CreatedAt
-	//dto.UpdatedAt = po.UpdatedAt
+	dto.UpdatedAt = po.UpdatedAt
 	return dto
 }
 
@@ -45,8 +45,8 @@ func (po *Account) FromDTO(dto *services.AccountDTO) {
 	po.CurrencyCode = dto.CurrencyCode
 	po.UserId = dto.UserId
 	po.Username = sql.NullString{Valid: true, String: dto.Username}
-	//po.Balance = dto.Balance
-	//po.Status = dto.Status
+	po.Balance = dto.Balance
+	po.Status = dto.Status
 	po.CreatedAt = dto.CreatedAt
-	//po.UpdatedAt = dto.UpdatedAt
+	po.UpdatedAt = dto.UpdatedAt
 }

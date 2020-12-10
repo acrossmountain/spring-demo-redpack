@@ -9,6 +9,8 @@ import (
 
 func TestEntry(t *testing.T) {
 	AccountDaoTest()
+	AccountLogDaoTest()
+	AccountLogDomainTest()
 	config()
 	SpringBoot.RunTestApplication(t, 0, "../config")
 }

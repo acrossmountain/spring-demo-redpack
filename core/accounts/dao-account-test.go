@@ -17,9 +17,9 @@ type TestAccountDaoInsert struct {
 	Db *gorm.DB              `autowire:""`
 }
 
-func (adi *TestAccountDaoInsert) Test(t *testing.T) {
+func (am *TestAccountDaoInsert) Test(t *testing.T) {
 
-	err := adi.Db.Transaction(func(tx *gorm.DB) error {
+	err := am.Db.Transaction(func(tx *gorm.DB) error {
 
 		dao := AccountDao{runner: tx}
 
@@ -59,9 +59,9 @@ type TestAccountDaoGetUserById struct {
 	Db *gorm.DB              `autowire:""`
 }
 
-func (adgubi *TestAccountDaoGetUserById) Test(t *testing.T) {
+func (am *TestAccountDaoGetUserById) Test(t *testing.T) {
 
-	err := adgubi.Db.Transaction(func(tx *gorm.DB) error {
+	err := am.Db.Transaction(func(tx *gorm.DB) error {
 
 		dao := AccountDao{runner: tx}
 
@@ -98,13 +98,13 @@ func (adgubi *TestAccountDaoGetUserById) Test(t *testing.T) {
 }
 
 // 测试 用户余额
-type TestAccountDaoUploadBalance struct {
+type TestAccountDaoUpdateBalance struct {
 	_  SpringBoot.JUnitSuite `export:""`
 	Db *gorm.DB              `autowire:""`
 }
 
-func (adub *TestAccountDaoUploadBalance) Test(t *testing.T) {
-	err := adub.Db.Transaction(func(tx *gorm.DB) error {
+func (am *TestAccountDaoUpdateBalance) Test(t *testing.T) {
+	err := am.Db.Transaction(func(tx *gorm.DB) error {
 
 		dao := AccountDao{runner: tx}
 		balance := decimal.NewFromFloat(100)
