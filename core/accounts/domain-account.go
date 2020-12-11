@@ -2,19 +2,24 @@ package accounts
 
 import (
 	"errors"
-	"github.com/shopspring/decimal"
 
 	"github.com/acrossmounation/redpack/services"
 
+	"github.com/go-spring/spring-boot"
 	"github.com/go-spring/spring-logger"
 	"github.com/jinzhu/gorm"
 	"github.com/segmentio/ksuid"
+	"github.com/shopspring/decimal"
 )
+
+func init() {
+	SpringBoot.RegisterBean(new(AccountDomain))
+}
 
 type AccountDomain struct {
 	account    Account
 	accountLog AccountLog
-	Db         *gorm.DB
+	Db         *gorm.DB `autowire:""` // 待定，是否使用自动注入
 }
 
 // logNo
@@ -124,20 +129,17 @@ func (domain *AccountDomain) Transfer(dto services.AccountTransferDTO) (
 
 		if err != nil {
 			status = services.TransferStatusFailure
-			SpringLogger.Error(err)
 			return err
 		}
 
 		if rows <= 0 && dto.ChangeFlag == services.ChangeFlagTransferOut {
 			status = services.TransferStatusSufficientFunds
-			SpringLogger.Error("balance not enough")
 			return errors.New("balance not enough")
 		}
 
 		account := accountDao.GetOne(dto.TradeBody.AccountNo)
 		if account == nil {
 			//status = ??
-			SpringLogger.Error("account error")
 			return errors.New("account error")
 		}
 
@@ -147,16 +149,57 @@ func (domain *AccountDomain) Transfer(dto services.AccountTransferDTO) (
 
 		if err != nil || id <= 0 {
 			status = services.TransferStatusFailure
-			SpringLogger.Error(err)
 			return err
 		}
 
 		return nil
 	})
 
-	if err == nil {
+	if err != nil {
+		SpringLogger.Error(err)
+	} else {
 		status = services.TransferStatusSuccess
 	}
 
-	return
+	return status, err
+}
+
+// 根据账户编号查询账户信息
+func (domain *AccountDomain) GetAccountByNo(accountNo string) *services.AccountDTO {
+	accountDao := AccountDao{runner: domain.Db}
+	account := accountDao.GetOne(accountNo)
+	if account == nil {
+		return nil
+	}
+	return account.ToDTO()
+}
+
+// 根据用户ID查询红包账户信息
+func (domain *AccountDomain) GetEnvelopeAccountByUserId(userId string) *services.AccountDTO {
+	accountDao := AccountDao{runner: domain.Db}
+	account := accountDao.GetUserById(userId, int(services.AccountTypeEnvelope))
+	if account == nil {
+		return nil
+	}
+	return account.ToDTO()
+}
+
+// 根据流水ID来查询账户流水
+func (domain *AccountDomain) GetAccountLogByLogNo(logNo string) *services.AccountLogDTO {
+	dao := AccountLogDao{runner: domain.Db}
+	accountLog := dao.GetOne(logNo)
+	if accountLog == nil {
+		return nil
+	}
+	return accountLog.ToDTO()
+}
+
+// 根据交易编号来查询账户流水
+func (domain *AccountDomain) GetAccountLogByTradeNo(tradeNo string) *services.AccountLogDTO {
+	dao := AccountLogDao{runner: domain.Db}
+	accountLog := dao.GetByTradeNo(tradeNo)
+	if accountLog == nil {
+		return nil
+	}
+	return accountLog.ToDTO()
 }

@@ -41,3 +41,11 @@ const (
 	// 收入
 	ChangeFlagTransferIn ChangeFlag = 1
 )
+
+// 账户类型
+type AccountType int8
+
+const (
+	AccountTypeSystemEnvelope AccountType = 1
+	AccountTypeEnvelope       AccountType = 2
+)

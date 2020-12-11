@@ -11,6 +11,7 @@ func TestEntry(t *testing.T) {
 	AccountDaoTest()
 	AccountLogDaoTest()
 	AccountLogDomainTest()
+	AccountServiceTest()
 	config()
 	SpringBoot.RunTestApplication(t, 0, "../config")
 }

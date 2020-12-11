@@ -23,3 +23,9 @@ func AccountLogDomainTest() {
 	SpringBoot.RegisterBean(new(accounts.TestAccountDomain))
 	SpringBoot.RegisterBean(new(accounts.TestAccountDomainTransfer))
 }
+
+// account service test
+func AccountServiceTest() {
+	SpringBoot.RegisterBean(new(accounts.TestAccountServiceCreate))
+	SpringBoot.RegisterBean(new(accounts.TestAccountServiceTransfer))
+}
