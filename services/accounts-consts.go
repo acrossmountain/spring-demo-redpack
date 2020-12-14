@@ -14,6 +14,12 @@ const (
 	TransferStatusSuccess TransferStatus = 1
 )
 
+var TransferStatusText = map[TransferStatus]string{
+	TransferStatusSuccess:         "转账成功",
+	TransferStatusSufficientFunds: "余额不足",
+	TransferStatusFailure:         "转账失败",
+}
+
 // 转账类型 0 = 创建账户 >= 1 进账 <= -1 支出
 type ChangeType int8
 

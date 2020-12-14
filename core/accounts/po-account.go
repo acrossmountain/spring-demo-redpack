@@ -23,6 +23,10 @@ type Account struct {
 	UpdatedAt    time.Time       `gorm:"column:updated_at;comment:'更新时间'"`
 }
 
+func (Account) TableName() string {
+	return "account"
+}
+
 func (po *Account) ToDTO() *services.AccountDTO {
 	dto := &services.AccountDTO{}
 	dto.AccountNo = po.AccountNo

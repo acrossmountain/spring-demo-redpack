@@ -8,6 +8,7 @@ const (
 	ResponseCodeRequestParamsError ResponseCode = 4100
 	ResponseCodeInnerServerError   ResponseCode = 5000
 	ResponseCodeBizError           ResponseCode = 6000
+	ResponseCodeBizTransferFailure ResponseCode = 6010
 )
 
 type Response struct {

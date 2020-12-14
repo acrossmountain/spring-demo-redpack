@@ -12,6 +12,7 @@ func init() {
 		account := v1.Route("/account")
 		account.PostMapping("/create", a.Create)
 		account.PostMapping("/transfer", a.Transfer)
-		account.PostMapping("/store", a.Store)
+		account.GetMapping("/envelope/:userId", a.Envelope)
+		account.GetMapping("/:accountNo", a.Account)
 	})
 }

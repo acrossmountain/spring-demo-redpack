@@ -27,6 +27,10 @@ type AccountLog struct {
 	CreatedAt       time.Time           `gorm:"column:created_at;comment:'创建时间'"`
 }
 
+func (AccountLog) TableName() string {
+	return "account_log"
+}
+
 func (po *AccountLog) FromTransferDTO(dto *services.AccountTransferDTO) {
 	po.TradeNo = dto.TradeNo
 	po.AccountNo = dto.TradeBody.AccountNo

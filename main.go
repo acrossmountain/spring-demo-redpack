@@ -12,11 +12,9 @@ import (
 )
 
 func main() {
-
 	SpringBoot.Config(func(db *gorm.DB) {
 		db.SingularTable(true)
 	})
-
 	SpringWeb.Validator = SpringWeb.NewDefaultValidator()
 	SpringBoot.RunApplication()
 }

@@ -42,16 +42,90 @@ func (a *Account) Create(ctx SpringWeb.WebContext) {
 
 // 账户转账
 func (a *Account) Transfer(ctx SpringWeb.WebContext) {
+	transfer := services.AccountTransferDTO{}
+	err := ctx.Bind(&transfer)
+	if err != nil {
+		ctx.JSON(http.StatusOK, utils.Response{
+			Code:    utils.ResponseCodeRequestParamsError,
+			Message: err.Error(),
+		})
+		return
+	}
+	status, err := a.AccountService.Transfer(transfer)
+	if err != nil {
+		ctx.JSON(http.StatusOK, utils.Response{
+			Code:    utils.ResponseCodeInnerServerError,
+			Message: err.Error(),
+		})
+		return
+	}
 
-}
-
-// 账户存储
-func (a *Account) Store(ctx SpringWeb.WebContext) {
-
+	if status == services.TransferStatusSuccess {
+		ctx.JSON(http.StatusOK, utils.Response{
+			Code:    utils.ResponseCodeOk,
+			Message: services.TransferStatusText[services.TransferStatusSuccess],
+			Data:    status,
+		})
+	} else {
+		ctx.JSON(http.StatusOK, utils.Response{
+			Code:    utils.ResponseCodeBizTransferFailure,
+			Message: services.TransferStatusText[status] + err.Error(),
+		})
+	}
+	return
 }
 
 // 查询红包账户
 func (a *Account) Envelope(ctx SpringWeb.WebContext) {
+	userId := ctx.PathParam("userId")
+	if len(userId) == 0 {
+		ctx.JSON(http.StatusOK, utils.Response{
+			Code:    utils.ResponseCodeRequestParamsError,
+			Message: "请求参数错误",
+		})
+		return
+	}
+
+	account := a.AccountService.GetEnvelopeAccountByUserId(userId)
+	if account == nil {
+		ctx.JSON(http.StatusOK, utils.Response{
+			Code:    utils.ResponseCodeInnerServerError,
+			Message: "未查找到账户",
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, utils.Response{
+		Code: utils.ResponseCodeOk,
+		Data: account,
+	})
+	return
 }
 
 // 查询账户信息
+func (a *Account) Account(ctx SpringWeb.WebContext) {
+	accountNo := ctx.PathParam("accountNo")
+
+	if len(accountNo) == 0 {
+		ctx.JSON(http.StatusOK, utils.Response{
+			Code:    utils.ResponseCodeRequestParamsError,
+			Message: "请求参数错误",
+		})
+		return
+	}
+
+	account := a.AccountService.GetAccountByNo(accountNo)
+	if account == nil {
+		ctx.JSON(http.StatusOK, utils.Response{
+			Code:    utils.ResponseCodeInnerServerError,
+			Message: "未查找到账户",
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, utils.Response{
+		Code: utils.ResponseCodeOk,
+		Data: account,
+	})
+	return
+}
