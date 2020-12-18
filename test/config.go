@@ -10,7 +10,7 @@ import (
 func config() {
 	SpringBoot.Config(func(db *gorm.DB) {
 		db.SingularTable(true)
-		//db.LogMode(true)
+		db.LogMode(true)
 	})
 	SpringWeb.Validator = SpringWeb.NewDefaultValidator()
 }
