@@ -8,11 +8,11 @@ import (
 )
 
 func TestEntry(t *testing.T) {
-	//AccountDaoTest()
-	//AccountLogDaoTest()
-	//AccountLogDomainTest()
-	//AccountServiceTest()
-	//EnvelopeGoodsDaoTest()
+	AccountDaoTest()
+	AccountLogDaoTest()
+	AccountLogDomainTest()
+	AccountServiceTest()
+	EnvelopeGoodsDaoTest()
 	EnvelopeGoodsItemDaoTest()
 	config()
 	SpringBoot.RunTestApplication(t, 0, "../config")

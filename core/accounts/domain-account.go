@@ -1,9 +1,11 @@
 package accounts
 
 import (
+	"context"
 	"errors"
 
 	"github.com/acrossmounation/redpack/services"
+	"github.com/acrossmounation/redpack/utils"
 
 	"github.com/go-spring/spring-boot"
 	"github.com/go-spring/spring-logger"
@@ -109,6 +111,17 @@ func (domain *AccountDomain) Create(dto services.AccountDTO) (
 // 账户转账（单方面转入或转出）
 func (domain *AccountDomain) Transfer(dto services.AccountTransferDTO) (
 	status services.TransferStatus, err error) {
+	err = domain.Db.Transaction(func(tx *gorm.DB) error {
+		ctx := utils.WithValueContext(context.Background(), tx)
+		status, err = domain.TransferWithContext(ctx, dto)
+		return err
+	})
+	return status, err
+}
+
+// 账户转账（跨函数事务）
+func (domain *AccountDomain) TransferWithContext(ctx context.Context, dto services.AccountTransferDTO) (
+	status services.TransferStatus, err error) {
 
 	// 如果交易变化为支出，修正amount
 	amount := dto.Amount
@@ -121,7 +134,7 @@ func (domain *AccountDomain) Transfer(dto services.AccountTransferDTO) (
 	domain.accountLog.FromTransferDTO(&dto)
 	domain.createAccountLogNo()
 
-	err = domain.Db.Transaction(func(tx *gorm.DB) error {
+	err = utils.ExecuteContext(ctx, func(tx *gorm.DB) error {
 		accountDao := &AccountDao{runner: tx}
 		accountLogDao := &AccountLogDao{runner: tx}
 
