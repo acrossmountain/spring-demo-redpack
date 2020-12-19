@@ -12,7 +12,8 @@ func TestEntry(t *testing.T) {
 	//AccountLogDaoTest()
 	//AccountLogDomainTest()
 	//AccountServiceTest()
-	GoodsDaoTest()
+	//EnvelopeGoodsDaoTest()
+	EnvelopeGoodsItemDaoTest()
 	config()
 	SpringBoot.RunTestApplication(t, 0, "../config")
 }

@@ -6,6 +6,10 @@ import (
 )
 
 // goods dao test
-func GoodsDaoTest() {
-	SpringBoot.RegisterBean(new(envelopes.TestGoodsDao))
+func EnvelopeGoodsDaoTest() {
+	SpringBoot.RegisterBean(new(envelopes.TestRedEnvelopeGoodsDao))
+}
+
+func EnvelopeGoodsItemDaoTest() {
+	SpringBoot.RegisterBean(new(envelopes.TestRedEnvelopeGoodsItemDao))
 }

@@ -10,18 +10,18 @@ import (
 )
 
 type RedEnvelopeItem struct {
-	Id           int64           `gorm:"column:id"`            // 自增ID
-	ItemNo       string          `gorm:"column:item_no;uni"`   // 红包订单详情编号
-	EnvelopeNo   string          `gorm:"column:envelope_no"`   // 红包编号,红包唯一标识
-	RecvUsername sql.NullString  `gorm:"column:recv_username"` // 红包接收者用户名称
-	RecvUserId   string          `gorm:"column:recv_user_id"`  // 红包接收者用户编号
-	Amount       decimal.Decimal `gorm:"column:amount"`        // 收到金额
-	Quantity     int             `gorm:"column:quantity"`      // 收到数量：对于收红包来说是1
-	RemainAmount decimal.Decimal `gorm:"column:remain_amount"` // 收到后红包剩余金额
-	AccountNo    string          `gorm:"column:account_no"`    // 红包接收者账户ID
-	PayStatus    int             `gorm:"column:pay_status"`    // 支付状态：未支付，支付中，已支付，支付失败
-	CreatedAt    time.Time       `gorm:"column:created_at"`    // 创建时间
-	UpdatedAt    time.Time       `gorm:"column:updated_at"`    // 更新时间
+	Id           int64           `gorm:"column:id"`             // 自增ID
+	ItemNo       string          `gorm:"column:item_no;unique"` // 红包订单详情编号
+	EnvelopeNo   string          `gorm:"column:envelope_no"`    // 红包编号,红包唯一标识
+	RecvUsername sql.NullString  `gorm:"column:recv_username"`  // 红包接收者用户名称
+	RecvUserId   string          `gorm:"column:recv_user_id"`   // 红包接收者用户编号
+	Amount       decimal.Decimal `gorm:"column:amount"`         // 收到金额
+	Quantity     int             `gorm:"column:quantity"`       // 收到数量：对于收红包来说是1
+	RemainAmount decimal.Decimal `gorm:"column:remain_amount"`  // 收到后红包剩余金额
+	AccountNo    string          `gorm:"column:account_no"`     // 红包接收者账户ID
+	PayStatus    int             `gorm:"column:pay_status"`     // 支付状态：未支付，支付中，已支付，支付失败
+	CreatedAt    time.Time       `gorm:"column:created_at"`     // 创建时间
+	UpdatedAt    time.Time       `gorm:"column:updated_at"`     // 更新时间
 }
 
 func (po *RedEnvelopeItem) ToDTO() *services.RedEnvelopeItemDTO {

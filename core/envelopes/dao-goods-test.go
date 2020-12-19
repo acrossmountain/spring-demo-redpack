@@ -14,12 +14,12 @@ import (
 	. "github.com/smartystreets/goconvey/convey"
 )
 
-type TestGoodsDao struct {
+type TestRedEnvelopeGoodsDao struct {
 	_  SpringBoot.JUnitSuite `export:""`
 	Db *gorm.DB              `autowire:""`
 }
 
-func (am *TestGoodsDao) Test(t *testing.T) {
+func (am *TestRedEnvelopeGoodsDao) Test(t *testing.T) {
 	err := am.Db.Transaction(func(tx *gorm.DB) error {
 
 		dao := RedEnvelopeGoodsDao{runner: tx}
